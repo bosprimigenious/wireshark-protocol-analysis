@@ -1,0 +1,6 @@
+sequenceDiagram
+    participant C as Client (10.122.219.108:62451)
+    participant S as Server (220.181.111.1:443)
+    C->>S: SYN Seq=3410032806
+    S->>C: SYN+ACK Seq=208860029 Ack=3410032807
+    C->>S: ACK Seq=3410032807 Ack=208860030

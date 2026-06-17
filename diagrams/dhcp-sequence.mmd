@@ -1,0 +1,7 @@
+sequenceDiagram
+    participant C as Client (0.0.0.0)
+    participant S as DHCP Server (10.3.9.2)
+    C->>S: DHCP Discover (广播 255.255.255.255)
+    S-->>C: DHCP Offer (单播 10.122.219.108)
+    C->>S: DHCP Request (广播 255.255.255.255)
+    S-->>C: DHCP ACK (单播 10.122.219.108)
