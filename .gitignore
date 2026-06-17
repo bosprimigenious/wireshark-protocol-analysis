@@ -1,0 +1,31 @@
+# System files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Wireshark temporary files
+*.pcapng.tmp
+*.pcap.tmp
+
+# Office temporary files
+~$*.docx
+~$*.pptx
+~$*.xlsx
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Build outputs
+*.aux
+*.log
+*.out
+*.toc
+
+# IDE
+.vscode/
+.idea/
+.claude/
+*.swp
+*.swo
