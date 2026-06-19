@@ -1,8 +1,6 @@
 sequenceDiagram
     participant C as Client
     participant S as Server
-    C->>S: FIN+ACK Seq=3410033530
-    S->>C: ACK Ack=3410033530
-    S->>C: FIN+ACK Seq=208868354
-    C->>S: RST+ACK Seq=3410033531
-    Note over C,S: HTTPS 短连接以 RST 快速关闭
+    C->>S: FIN+ACK Seq=524890395
+    S->>C: FIN+ACK Seq=4130145356 Ack=524890396
+    C->>S: ACK Ack=4130145357

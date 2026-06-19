@@ -1,9 +1,6 @@
 sequenceDiagram
     participant C as Client
     participant S as Server
-    C->>S: PSH+ACK Seq=3410032807 Len=460
-    S->>C: ACK Ack=3410033267 Win=948
-    Note over S: 3410033267 = 3410032807 + 460
-    S->>C: PSH+ACK Seq=208864110 Len=1122
-    S->>C: RETRANS Seq=208864110 Len=1122
-    C->>S: ACK Ack=208865232
+    C->>S: PSH+ACK Seq=524890320 Len=75
+    S->>C: ACK Ack=524890395 Win=16
+    Note over S: 524890395 = 524890320 + 75

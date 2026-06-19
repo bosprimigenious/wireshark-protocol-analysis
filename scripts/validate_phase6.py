@@ -26,7 +26,7 @@ REQUIRED_CAPTURES = [
     "captures/icmp/icmp-large-packet-fragmentation.pcapng",
     "captures/dhcp/dhcp-dora.pcapng",
     "captures/arp/arp-request-reply.pcapng",
-    "captures/tcp/tcp-https.pcapng",
+    "captures/tcp/tcp-http.pcapng",
 ]
 FORBIDDEN = re.compile(r"待填|TODO|占位符|\(从 Wireshark 读\)")
 
@@ -64,14 +64,14 @@ def check_ip_checksum() -> list[str]:
 
 
 def check_tcp_handshake() -> list[str]:
-    pcap = ROOT / "captures/tcp/tcp-https.pcapng"
+    pcap = ROOT / "captures/tcp/tcp-http.pcapng"
     rows = tshark(
         "-o",
         "tcp.relative_sequence_numbers:FALSE",
         "-r",
         str(pcap),
         "-Y",
-        "frame.number>=29 && frame.number<=31",
+        "tcp.stream==0 && frame.number<=3",
         "-T",
         "fields",
         "-e",
@@ -81,9 +81,9 @@ def check_tcp_handshake() -> list[str]:
     ).splitlines()
     if len(rows) < 3:
         return ["TCP 握手帧不足 3 个"]
-    seq1, ack1 = rows[0].split("\t")
+    seq1, _ = rows[0].split("\t")
     seq2, ack2 = rows[1].split("\t")
-    seq3, ack3 = rows[2].split("\t")
+    _, ack3 = rows[2].split("\t")
     errors: list[str] = []
     if int(ack2) != int(seq1) + 1:
         errors.append(f"握手步2 Ack={ack2} != Seq1+1={int(seq1)+1}")
@@ -97,14 +97,14 @@ def _flag_on(value: str) -> bool:
 
 
 def check_tcp_teardown() -> list[str]:
-    pcap = ROOT / "captures/tcp/tcp-https.pcapng"
+    pcap = ROOT / "captures/tcp/tcp-http.pcapng"
     raw = tshark(
         "-o",
         "tcp.relative_sequence_numbers:FALSE",
         "-r",
         str(pcap),
         "-Y",
-        "frame.number==55 || frame.number==56 || frame.number==58 || frame.number==59",
+        "tcp.stream==0 && (frame.number==9 || frame.number==10 || frame.number==11)",
         "-T",
         "fields",
         "-e",
@@ -115,18 +115,26 @@ def check_tcp_teardown() -> list[str]:
         "tcp.flags.fin",
         "-e",
         "tcp.seq_raw",
+        "-e",
+        "tcp.ack_raw",
     )
-    data: dict[int, tuple[bool, bool, int]] = {}
+    data: dict[int, tuple[bool, bool, int, int]] = {}
     for line in raw.splitlines():
-        num, rst, fin, seq = line.split("\t")
-        data[int(num)] = (_flag_on(rst), _flag_on(fin), int(seq))
+        num, rst, fin, seq, ack = line.split("\t")
+        data[int(num)] = (_flag_on(rst), _flag_on(fin), int(seq), int(ack))
     errors: list[str] = []
-    if not data.get(55, (False, False, 0))[1]:
-        errors.append("帧 55 应为 FIN")
-    if not data.get(59, (False, False, 0))[1]:
-        errors.append("帧 59 应为 FIN")
-    if not data.get(58, (False, False, 0))[0]:
-        errors.append("帧 58 应为 RST（本捕获以 RST 关闭）")
+    if not data.get(9, (False, False, 0, 0))[1]:
+        errors.append("帧 9 应为 FIN")
+    if not data.get(10, (False, False, 0, 0))[1]:
+        errors.append("帧 10 应为 FIN")
+    if data.get(9) and data.get(10):
+        u = data[9][2]
+        if data[10][3] != u + 1:
+            errors.append(f"挥手步2 Ack={data[10][3]} != u+1={u+1}")
+    if data.get(10) and data.get(11):
+        v = data[10][2]
+        if data[11][3] != v + 1:
+            errors.append(f"挥手步3 Ack={data[11][3]} != v+1={v+1}")
     return errors
 
 

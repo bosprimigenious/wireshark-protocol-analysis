@@ -157,13 +157,14 @@ Display Filter:  tcp.port == 80
 ```
 
 1. 在 WLAN 网卡上开始捕获。
-2. 打开浏览器，访问：
+2. 在 PowerShell 执行（强制 IPv4）：
 
-```
-http://example.com
+```powershell
+curl -4 http://example.com
 ```
 
-3. 页面加载完成后停止捕获并保存。
+3. 页面加载完成后停止捕获并保存为 `captures/tcp/tcp-http.pcapng`。
+4. 用 `tcp.stream==0` 分析 example.com 的完整握手、数据传输与 FIN 挥手。
 
 ### 方案 B：HTTPS（校园网常用）
 
