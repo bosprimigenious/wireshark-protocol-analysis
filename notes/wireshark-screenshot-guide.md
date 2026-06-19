@@ -3,6 +3,14 @@
 > 按老师要求，每张图须包含 **Packet List + Packet Detail（协议树展开）+ Packet Bytes** 三栏。  
 > 保存到 `report/assets/`，**覆盖**同名 PNG 后执行 `typst compile report/lab2-report.typ`。
 
+**自动化（推荐）**：在项目根目录执行（运行约 2 分钟，期间勿操作鼠标键盘）：
+
+```powershell
+python scripts/capture_wireshark_screenshots.py
+```
+
+脚本会依次打开 Wireshark、应用过滤器、跳转到目标帧并展开协议层，输出 8 张真实界面截图。
+
 ## 通用操作
 
 1. 用 Wireshark 打开 `captures/` 下对应 `.pcapng`
