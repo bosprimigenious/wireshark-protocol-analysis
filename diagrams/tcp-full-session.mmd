@@ -1,0 +1,12 @@
+sequenceDiagram
+    participant C as Client (60247)
+    participant S as Server (80)
+    C->>S: SYN Seq=524890319
+    S->>C: SYN+ACK Seq=4130144482 Ack=524890320
+    C->>S: ACK Seq=524890320 Ack=4130144483
+    C->>S: PSH+ACK HTTP Request/Data Seq=524890320 Len=75
+    S->>C: ACK Ack=524890395 Win=16
+    C->>S: FIN+ACK Seq=524890395
+    S->>C: ACK Ack=524890396
+    S->>C: FIN Seq=4130145356
+    C->>S: ACK Ack=4130145357
