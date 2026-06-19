@@ -79,10 +79,11 @@ wireshark-protocol-analysis/
 3. 按 [`notes/experiment-steps.md`](notes/experiment-steps.md) 逐步抓包
 4. 将 `.pcapng` 文件保存到 `captures/` 对应子目录
 5. 执行 `tasks.md` Phase 2–5，撰写分析笔记和报告
+6. **Wireshark 真截图**：按 [`notes/wireshark-screenshot-guide.md`](notes/wireshark-screenshot-guide.md) 替换 `report/assets/` 下 8 张 PNG，再编译 PDF
 
 ## 实验报告结构（指导书第 9 节）
 
-最终报告 `report/lab2-report.md` 须包含以下章节：
+最终报告 `report/lab2-report.pdf`（Typst 源码 `lab2-report.typ`）须包含以下章节：
 
 | 章节 | 内容 |
 |---|---|
@@ -106,7 +107,7 @@ Phase 2  协议分析笔记        ✅ 5 份 notes 已填真实字段
 Phase 3  Mermaid 时序图      ✅ diagrams/*.mmd
 Phase 4  Python 校验脚本     ✅ verify_ipv4_checksum.py
 Phase 5  合成实验报告        ✅ lab2-report.typ + PDF
-Phase 6  最终检查与提交      ✅ validate_phase6.py 全通过
+Phase 6  最终检查与提交      ✅ 验证通过，待 Wireshark 真截图 + push
 ```
 
 详见 [`tasks.md`](tasks.md)。
